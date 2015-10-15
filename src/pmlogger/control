@@ -37,6 +37,8 @@ $PMCD_REQUEST_TIMEOUT=120
 #
 # Note: - LOCALHOSTNAME will be expanded to local: in the first column,
 #         and to `hostname` in the fourth (directory) column
+#       - LOCALDAY will be expanded to `date "+%Y%m%d"` in the fourth column
+#       - LOCALMONTH will be expanded to `date "+%Y%m"` in the fourth column
 #       - Default local primary logger specification is nowadays setup
 #         via ${PCP_PMLOGGERCONTROL_PATH}.d/local
 #	- If multiple pmloggers for the same host (e.g. both primary and

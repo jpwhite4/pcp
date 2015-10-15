@@ -449,6 +449,12 @@ _parse_control()
 	dir=`echo $dir | sed -e "s;LOCALHOSTNAME;$dir_hostname;"`
 	[ "x$host" = "xLOCALHOSTNAME" ] && host=local:
 
+        dir_date_day=`date "+%Y%m%d"`
+        dir=`echo $dir | sed -e "s;LOCALDAY;$dir_date_day;"`
+
+        dir_date_month=`date "+%Y%m"`
+        dir=`echo $dir | sed -e "s;LOCALMONTH;$dir_date_month;"`
+
 	$VERY_VERBOSE && echo "[control:$line] host=\"$host\" primary=\"$primary\" socks=\"$socks\" dir=\"$dir\" args=\"$args\""
 
 	case "$host"
