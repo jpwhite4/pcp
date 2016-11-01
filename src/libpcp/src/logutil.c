@@ -923,6 +923,7 @@ __pmLogLoadLabel(__pmLogCtl *lcp, const char *name)
 
     blen = (int)strlen(base);
     PM_LOCK(__pmLock_libpcp);
+#if 0
     if ((dirp = opendir(dir)) != NULL) {
 #if defined(HAVE_READDIR64)
 	while ((direntp = readdir64(dirp)) != NULL)
@@ -1004,6 +1005,27 @@ __pmLogLoadLabel(__pmLogCtl *lcp, const char *name)
 	
 #endif
     }
+#else
+
+    snprintf(filename, sizeof(filename), "%s%c%s.index", dir, sep, base);
+    if ((lcp->l_tifp = fopen(filename, "r")) == NULL) {
+        sts = -oserror();
+        PM_UNLOCK(__pmLock_libpcp);
+        goto cleanup;
+    }
+    snprintf(filename, sizeof(filename), "%s%c%s.meta", dir, sep, base);
+    if ((lcp->l_mdfp = fopen(filename, "r")) == NULL) {
+        sts = -oserror();
+        PM_UNLOCK(__pmLock_libpcp);
+        goto cleanup;
+    }
+
+    // assume that there is one volume
+    lcp->l_minvol = 0;
+    lcp->l_maxvol = 0;
+
+    exists = 1;
+#endif
     PM_UNLOCK(__pmLock_libpcp);
 
     if (lcp->l_minvol == -1 || lcp->l_mdfp == NULL) {
