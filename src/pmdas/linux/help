@@ -1712,6 +1712,13 @@ See also the kernel.uname.* metrics
 @ hinv.cpu.cache_alignment Cache alignment for each CPU as reported by /proc/cpuinfo
 @ hinv.cpu.online CPU online state from /sys/devices/system/cpu/*/online
 @ hinv.node.online NUMA node online state from /sys/devices/system/node/*/online
+@ hinv.dmi.board_vendor the board vendor as reported by /sys/class/dmi/id/board_vendor
+@ hinv.dmi.board_name the board name as reported by /sys/class/dmi/id/board_name
+@ hinv.dmi.board_version the board version as reported by /sys/class/dmi/id/board_version
+@ hinv.dmi.product_family the product family as reported by /sys/class/dmi/id/product_family
+@ hinv.dmi.product_name the product name as reported by /sys/class/dmi/id/product_name
+@ hinv.dmi.product_version the product version as reported by /sys/class/dmi/id/product_version
+@ hinv.dmi.sys_vendor the system vendor as reported by /sys/class/dmi/id/sys_vendor
 @ kernel.all.hz value of HZ (jiffies/second) for the currently running kernel
 @ kernel.all.uptime time the current kernel has been running
 @ kernel.all.idletime time the current kernel has been idle since boot
