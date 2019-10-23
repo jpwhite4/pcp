@@ -39,7 +39,7 @@ CFILES		= pmda.c linux_table.c mem_bandwidth.c namespaces.c \
 		  proc_net_raw.c proc_net_udp.c proc_net_unix.c \
 		  proc_net_snmp6.c proc_buddyinfo.c proc_zoneinfo.c \
 		  sysfs_tapestats.c proc_net_sockstat6.c \
-		  proc_fs_nfsd.c proc_tty.c
+		  proc_fs_nfsd.c proc_tty.c sysfs_dmi.c
 
 HFILES		= linux.h linux_table.h convert.h namespaces.h \
 		  proc_stat.h proc_meminfo.h proc_loadavg.h \
@@ -54,7 +54,7 @@ HFILES		= linux.h linux_table.h convert.h namespaces.h \
 		  proc_net_raw.h proc_net_udp.h proc_net_unix.h \
 		  proc_net_snmp6.h proc_buddyinfo.h proc_zoneinfo.h \
 		  sysfs_tapestats.h proc_net_sockstat6.h \
-		  proc_fs_nfsd.h proc_tty.h
+		  proc_fs_nfsd.h proc_tty.h sysfs_dmi.h
 
 VERSION_SCRIPT	= exports
 HELPTARGETS	= help.dir help.pag
@@ -154,4 +154,5 @@ pmda.o proc_buddyinfo.o:	proc_buddyinfo.h
 pmda.o proc_zoneinfo.o:	proc_zoneinfo.h
 pmda.o ksm.o:	ksm.h
 pmda.o proc_fs_nfsd.o:	proc_fs_nfsd.h
+pmda.o sysfs_dmi.o: sysfs_dmi.h
 pmda.o:	$(VERSION_SCRIPT)

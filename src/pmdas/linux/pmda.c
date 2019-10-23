@@ -69,6 +69,7 @@
 #include "ksm.h"
 #include "sysfs_tapestats.h"
 #include "proc_tty.h"
+#include "sysfs_dmi.h"
 
 static proc_stat_t		proc_stat;
 static proc_meminfo_t		proc_meminfo;
@@ -104,6 +105,7 @@ static ksm_info_t               ksm_info;
 static proc_fs_nfsd_t 		proc_fs_nfsd;
 static proc_locks_t 		proc_locks;
 static int                      proc_tty_permission;
+static sysfs_dmi_t              sysfs_dmi;
 
 static int		_isDSO = 1;	/* =0 I am a daemon */
 static int		rootfd = -1;	/* af_unix pmdaroot */
@@ -5635,6 +5637,31 @@ static pmdaMetric metrictab[] = {
     { NULL, {PMDA_PMID(CLUSTER_TTY,TTY_IRQ), PM_TYPE_U32, TTY_INDOM,
 	     PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0)} },
 
+/*
+* /sys/class/dmi/id/ cluster
+*/
+    /* hinv.dmi.board_vendor */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 0), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.board_name */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 1), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.board_version */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 2), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.product_family */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 3), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.product_name */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 4), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.product_version */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 5), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+    /* hinv.dmi.sys_vendor */
+    { NULL, { PMDA_PMID(CLUSTER_SYSFS_DMI, 6), PM_TYPE_STRING,
+        PM_INDOM_NULL, PM_SEM_DISCRETE, PMDA_PMUNITS(0,0,0,0,0,0) } },
+
 };
 
 typedef struct {
@@ -5920,6 +5947,11 @@ linux_refresh(pmdaExt *pmda, int *need_refresh, int context)
 	    proc_tty_permission = 0;
 	}
     }
+
+    if (need_refresh[CLUSTER_SYSFS_DMI]) {
+        refresh_sysfs_dmi(&sysfs_dmi);
+    }
+
 done:
     if (need_refresh_mtab)
 	pmdaDynamicMetricTable(pmda);
@@ -7932,6 +7964,51 @@ linux_fetchCallBack(pmdaMetric *mdesc, unsigned int inst, pmAtomValue *atom)
 	    }
 	}
 	break;
+
+    /*
+    * /sys/class/dmi/id/ cluster
+    */
+    case CLUSTER_SYSFS_DMI:
+        switch(item) {
+            case 0: /* hinv.dmi.board_vendor */
+                if (sysfs_dmi.board_vendor_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.board_vendor;
+                break;
+            case 1: /* hinv.dmi.board_name */
+                if (sysfs_dmi.board_name_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.board_name;
+                break;
+            case 2: /* hinv.dmi.board_version */
+                if (sysfs_dmi.board_version_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.board_version;
+                break;
+            case 3: /* hinv.dmi.product_family */
+                if (sysfs_dmi.product_family_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.product_family;
+                break;
+            case 4: /* hinv.dmi.product_name */
+                if (sysfs_dmi.product_name_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.product_name;
+                break;
+            case 5: /* hinv.dmi.product_version */
+                if (sysfs_dmi.product_version_error == 1)
+                    return 0;
+                atom->cp = sysfs_dmi.product_version;
+                break;
+            case 6: /* hinv.dmi.sys_vendor */
+                if (sysfs_dmi.sys_vendor_error == 1)
+                        return 0;
+                    atom->cp = sysfs_dmi.sys_vendor;
+                break;
+            default:
+                return PM_ERR_PMID;
+        }
+    break;
 
     default: /* unknown cluster */
 	return PM_ERR_PMID;

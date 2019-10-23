@@ -104,6 +104,7 @@ enum {
 	CLUSTER_NET_UDP6,	/* 80 /proc/net/udp6 */
 	CLUSTER_NET_UNIX,	/* 81 /proc/net/unix */
 	CLUSTER_SOFTIRQS_TOTAL,	/* 82 /proc/softirqs */
+	CLUSTER_SYSFS_DMI = 86,	/* 86 /sys/class/dmi/id/ metrics */
 
 	NUM_CLUSTERS		/* one more than highest numbered cluster */
 };
