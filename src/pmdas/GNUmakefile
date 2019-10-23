@@ -25,7 +25,7 @@ CPMDAS = root pmcd \
 	mmv lmsensors process roomtemp summary etw \
 	lustrecomm infiniband logger bash systemd \
 	gfs2 jbd2 cifs rpm nvidia perfevent \
-	dm pipe openbsd docker smart podman
+	dm pipe openbsd docker smart podman ipmi
 
 PLPMDAS = bonding netfilter zimbra postgresql \
 	dbping memcache mysql oracle vmware kvm \

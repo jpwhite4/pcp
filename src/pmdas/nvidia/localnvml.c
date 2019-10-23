@@ -43,6 +43,7 @@ struct {
     { .symbol = "nvmlDeviceGetComputeRunningProcesses" },
     { .symbol = "nvmlDeviceGetAccountingPids" },
     { .symbol = "nvmlDeviceGetAccountingStats" },
+    { .symbol = "nvmlDeviceGetPowerUsage" },
 };
 enum {
     NVML_INIT,
@@ -61,6 +62,7 @@ enum {
     NVML_DEVICE_GET_COMPUTERUNNINGPROCESSES,
     NVML_DEVICE_GET_ACCOUNTINGPIDS,
     NVML_DEVICE_GET_ACCOUNTINGSTATS,
+    NVML_DEVICE_GET_POWERUSAGE,
     NVML_SYMBOL_COUNT
 };
 typedef int (*local_init_t)(void);
@@ -79,6 +81,7 @@ typedef int (*local_dev_set_persistencemode_t)(nvmlDevice_t, nvmlEnableState_t);
 typedef int (*local_dev_get_computerunningprocesses_t)(nvmlDevice_t, unsigned int *, nvmlProcessInfo_t *);
 typedef int (*local_dev_get_accountingpids_t)(nvmlDevice_t, unsigned int *, unsigned int *);
 typedef int (*local_dev_get_accountingstats_t)(nvmlDevice_t, unsigned int, nvmlAccountingStats_t *);
+typedef int (*local_dev_get_powerusage_t)(nvmlDevice_t, unsigned int *);
 
 static int
 resolve_symbols(void)
@@ -289,6 +292,17 @@ localNvmlDeviceGetAccountingStats(nvmlDevice_t device, unsigned int pid, nvmlAcc
 	return NVML_ERROR_FUNCTION_NOT_FOUND;
     dev_get_accountingstats = (local_dev_get_accountingstats_t)func;
     return dev_get_accountingstats(device, pid, stats);
+}
+
+localNvmlDeviceGetPowerUsage ( nvmlDevice_t device, unsigned int* power )
+{
+    local_dev_get_powerusage_t dev_get_powerusage;
+    void *func = nvml_symtab[NVML_DEVICE_GET_POWERUSAGE].handle;
+
+    if (!func)
+	return NVML_ERROR_FUNCTION_NOT_FOUND;
+    dev_get_powerusage = (local_dev_get_powerusage_t)func;
+    return dev_get_powerusage(device, power);
 }
 
 const char *

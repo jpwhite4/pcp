@@ -119,5 +119,6 @@ extern int localNvmlDeviceSetPersistenceMode(nvmlDevice_t, nvmlEnableState_t);
 extern int localNvmlDeviceGetComputeRunningProcesses(nvmlDevice_t, unsigned int *, nvmlProcessInfo_t *);
 extern int localNvmlDeviceGetAccountingPids(nvmlDevice_t, unsigned int *, unsigned int *);
 extern int localNvmlDeviceGetAccountingStats(nvmlDevice_t, unsigned int, nvmlAccountingStats_t *);
+extern int localNvmlDeviceGetPowerUsage (nvmlDevice_t, unsigned int*);
 
 #endif /* _LOCAL_NVML_H */
